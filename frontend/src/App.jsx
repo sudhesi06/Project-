@@ -6,12 +6,15 @@ import { Subjects } from './components/Subjects';
 import { Planner } from './components/Planner';
 import { AIAdvisor } from './components/AIAdvisor';
 import { ProgressTracker } from './components/ProgressTracker';
+import { Login } from './components/Login';
 import { api } from './services/api';
+import { authService } from './services/auth';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [theme, setTheme] = useState('dark');
+  const [currentUser, setCurrentUser] = useState(() => authService.getCurrentUser());
   
   // Data States
   const [subjects, setSubjects] = useState([]);
@@ -30,6 +33,11 @@ export default function App() {
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setCurrentUser(null);
   };
 
   // Load Initial Data from FastAPI Backend
@@ -157,6 +165,10 @@ export default function App() {
     }
   };
 
+  if (!currentUser) {
+    return <Login onLogin={(user) => setCurrentUser(user)} />;
+  }
+
   return (
     <div className="app-container">
       <div className="main-content">
@@ -167,6 +179,8 @@ export default function App() {
           theme={theme} 
           toggleTheme={toggleTheme}
           todayTaskCount={todaySessions.length}
+          currentUser={currentUser}
+          onLogout={handleLogout}
         />
 
         <div className="page-body">

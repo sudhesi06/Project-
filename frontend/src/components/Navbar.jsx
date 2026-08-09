@@ -1,10 +1,10 @@
 import React from 'react';
 import { 
   GraduationCap, LayoutDashboard, BookOpen, CalendarCheck, 
-  Sparkles, BarChart2, Moon, Sun, Clock 
+  Sparkles, BarChart2, Moon, Sun, Clock, LogOut, User
 } from 'lucide-react';
 
-export function Navbar({ activeTab, setActiveTab, theme, toggleTheme, todayTaskCount }) {
+export function Navbar({ activeTab, setActiveTab, theme, toggleTheme, todayTaskCount, currentUser, onLogout }) {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'subjects', label: 'Subjects', icon: BookOpen },
@@ -115,6 +115,36 @@ export function Navbar({ activeTab, setActiveTab, theme, toggleTheme, todayTaskC
           <span>{todayFormatted}</span>
         </div>
 
+        {currentUser && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            background: 'rgba(99, 102, 241, 0.1)',
+            border: '1px solid rgba(99, 102, 241, 0.25)',
+            padding: '0.35rem 0.75rem',
+            borderRadius: 'var(--radius-full)'
+          }}>
+            <div style={{
+              width: '24px',
+              height: '24px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #6366F1, #EC4899)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontSize: '0.75rem',
+              fontWeight: 700
+            }}>
+              {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : <User size={14} />}
+            </div>
+            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+              {currentUser.name || currentUser.email}
+            </span>
+          </div>
+        )}
+
         <button
           onClick={toggleTheme}
           title="Toggle Theme"
@@ -134,7 +164,26 @@ export function Navbar({ activeTab, setActiveTab, theme, toggleTheme, todayTaskC
         >
           {theme === 'dark' ? <Sun size={18} color="#FBBF24" /> : <Moon size={18} color="#6366F1" />}
         </button>
+
+        {onLogout && (
+          <button
+            onClick={onLogout}
+            title="Log Out"
+            className="btn btn-secondary btn-sm"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              padding: '0.45rem 0.8rem',
+              borderRadius: 'var(--radius-sm)'
+            }}
+          >
+            <LogOut size={16} color="#FB7185" />
+            <span>Logout</span>
+          </button>
+        )}
       </div>
     </header>
   );
 }
+
