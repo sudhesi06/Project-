@@ -9,7 +9,8 @@ export function Dashboard({
   todaySessions, 
   aiAdvice, 
   onToggleSession, 
-  onNavigate 
+  onNavigate,
+  currentUser
 }) {
   const completedTodayCount = todaySessions.filter(s => s.is_completed).length;
   const totalTodayCount = todaySessions.length;
@@ -56,7 +57,7 @@ export function Dashboard({
               <span>Smart AI Semester Assistant</span>
             </div>
             <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#FFFFFF', marginBottom: '0.5rem' }}>
-              Welcome back, Student! 👋
+              Welcome back, {currentUser?.name || 'Student'}! 👋
             </h2>
             <p style={{ color: 'var(--text-secondary)', maxWidth: '600px', fontSize: '0.95rem' }}>
               You have <strong style={{ color: '#A5B4FC' }}>{totalTodayCount - completedTodayCount} tasks remaining</strong> for today. 

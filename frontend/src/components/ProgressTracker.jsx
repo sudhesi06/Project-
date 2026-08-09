@@ -81,33 +81,39 @@ export function ProgressTracker({ subjects, sessions }) {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            {subjects.map((sub) => {
-              const totalT = sub.topics?.length || 0;
-              const compT = sub.topics ? sub.topics.filter(t => t.is_completed).length : 0;
+            {subjects.length === 0 ? (
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', textAlign: 'center', padding: '2rem' }}>
+                No active subjects found. Add course subjects under the Subjects tab to track your progress!
+              </p>
+            ) : (
+              subjects.map((sub) => {
+                const totalT = sub.topics?.length || 0;
+                const compT = sub.topics ? sub.topics.filter(t => t.is_completed).length : 0;
 
-              return (
-                <div key={sub.id} style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: sub.color || '#6366F1' }} />
-                      <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>{sub.name}</h4>
+                return (
+                  <div key={sub.id} style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: sub.color || '#6366F1' }} />
+                        <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>{sub.name}</h4>
+                      </div>
+                      <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#A5B4FC' }}>
+                        {sub.progress_pct}%
+                      </span>
                     </div>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#A5B4FC' }}>
-                      {sub.progress_pct}%
-                    </span>
-                  </div>
 
-                  <div className="progress-bar-bg" style={{ height: '10px', marginBottom: '0.5rem' }}>
-                    <div className="progress-bar-fill" style={{ width: `${sub.progress_pct}%`, backgroundColor: sub.color }} />
-                  </div>
+                    <div className="progress-bar-bg" style={{ height: '10px', marginBottom: '0.5rem' }}>
+                      <div className="progress-bar-fill" style={{ width: `${sub.progress_pct}%`, backgroundColor: sub.color }} />
+                    </div>
 
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                    <span>{compT} of {totalT} chapters completed</span>
-                    <span>Exam: {sub.exam_date}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                      <span>{compT} of {totalT} chapters completed</span>
+                      <span>Exam: {sub.exam_date}</span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
 

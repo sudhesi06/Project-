@@ -1,5 +1,42 @@
-from pydantic import BaseModel, Field
+# pyrefly: ignore [missing-import]
+from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional
+
+# --- Auth & User Schemas ---
+class UserCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    email: str = Field(..., min_length=3, max_length=100)
+    password: str = Field(..., min_length=6)
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
+class ProfileUpdate(BaseModel):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    major: Optional[str] = None
+    daily_goal: Optional[float] = None
+    bio: Optional[str] = None
+    avatar: Optional[str] = None
+
+class UserResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+    major: Optional[str] = "Computer Science & Engineering"
+    daily_goal: Optional[float] = 4.0
+    bio: Optional[str] = "Student at AI Study Planner"
+    avatar: Optional[str] = None
+    created_at: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse
 
 # --- Topic Schemas ---
 class TopicBase(BaseModel):
@@ -44,6 +81,7 @@ class SubjectUpdate(BaseModel):
 
 class SubjectResponse(SubjectBase):
     id: int
+    user_id: Optional[int] = None
     progress_pct: float
     topics: List[TopicResponse] = []
 
@@ -73,6 +111,7 @@ class StudySessionUpdate(BaseModel):
 
 class StudySessionResponse(StudySessionBase):
     id: int
+    user_id: Optional[int] = None
     subject_name: Optional[str] = None
     subject_color: Optional[str] = None
     topic_title: Optional[str] = None
@@ -92,6 +131,7 @@ class PlannerSettingUpdate(PlannerSettingBase):
 
 class PlannerSettingResponse(PlannerSettingBase):
     id: int
+    user_id: Optional[int] = None
 
     class Config:
         from_attributes = True

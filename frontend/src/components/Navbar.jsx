@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   GraduationCap, LayoutDashboard, BookOpen, CalendarCheck, 
-  Sparkles, BarChart2, Moon, Sun, Clock, LogOut, User
+  Sparkles, BarChart2, Moon, Sun, Clock, LogOut, User, ExternalLink
 } from 'lucide-react';
 
 export function Navbar({ activeTab, setActiveTab, theme, toggleTheme, todayTaskCount, currentUser, onLogout }) {
@@ -11,6 +11,7 @@ export function Navbar({ activeTab, setActiveTab, theme, toggleTheme, todayTaskC
     { id: 'planner', label: 'Study Planner', icon: CalendarCheck },
     { id: 'ai-advisor', label: 'AI Advisor', icon: Sparkles, badge: 'AI' },
     { id: 'progress', label: 'Progress', icon: BarChart2 },
+    { id: 'profile', label: 'Profile', icon: User },
   ];
 
   const todayFormatted = new Date().toLocaleDateString('en-US', {
@@ -100,6 +101,32 @@ export function Navbar({ activeTab, setActiveTab, theme, toggleTheme, todayTaskC
 
       {/* Quick Action Tools */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        
+        {/* Live Server URL Link */}
+        <a
+          href="http://localhost:3000/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            fontSize: '0.82rem',
+            fontWeight: 600,
+            color: '#A5B4FC',
+            background: 'rgba(99, 102, 241, 0.12)',
+            border: '1px solid rgba(99, 102, 241, 0.3)',
+            padding: '0.4rem 0.85rem',
+            borderRadius: 'var(--radius-full)',
+            textDecoration: 'none',
+            transition: 'var(--transition-fast)'
+          }}
+          title="Open Application URL in new tab"
+        >
+          <ExternalLink size={14} color="#818CF8" />
+          <span>http://localhost:3000/</span>
+        </a>
+
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -116,15 +143,21 @@ export function Navbar({ activeTab, setActiveTab, theme, toggleTheme, todayTaskC
         </div>
 
         {currentUser && (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            background: 'rgba(99, 102, 241, 0.1)',
-            border: '1px solid rgba(99, 102, 241, 0.25)',
-            padding: '0.35rem 0.75rem',
-            borderRadius: 'var(--radius-full)'
-          }}>
+          <div 
+            onClick={() => setActiveTab('profile')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: activeTab === 'profile' ? 'rgba(99, 102, 241, 0.25)' : 'rgba(99, 102, 241, 0.1)',
+              border: '1px solid rgba(99, 102, 241, 0.3)',
+              padding: '0.35rem 0.75rem',
+              borderRadius: 'var(--radius-full)',
+              cursor: 'pointer',
+              transition: 'var(--transition-fast)'
+            }}
+            title="View User Profile"
+          >
             <div style={{
               width: '24px',
               height: '24px',
@@ -135,9 +168,14 @@ export function Navbar({ activeTab, setActiveTab, theme, toggleTheme, todayTaskC
               justifyContent: 'center',
               color: 'white',
               fontSize: '0.75rem',
-              fontWeight: 700
+              fontWeight: 700,
+              overflow: 'hidden'
             }}>
-              {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : <User size={14} />}
+              {currentUser.avatar ? (
+                <img src={currentUser.avatar} alt="User avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                (currentUser.name || 'U').charAt(0).toUpperCase()
+              )}
             </div>
             <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}>
               {currentUser.name || currentUser.email}
